@@ -3,7 +3,7 @@ import HelloWorld from './components/HelloWorld.vue'
 import Pikaso, { ShapeModel } from 'pikaso';
 import { onMounted, ref } from 'vue';
 
-const editor = ref(null)
+const editor = ref()
 
 onMounted(() => {
   const container = window.document.querySelector('#canvas-container')
@@ -11,16 +11,30 @@ onMounted(() => {
     container,
     width: 500,
     height: 500,
+    transformer: {
+      borderDash: [15, 10],
+      borderStroke: '#FF0000',
+      borderStrokeWidth: 2,
+      anchorSize: 15,
+      anchorFill: 'white',
+      anchorStroke: '#FF0000',
+      anchorStrokeWidth: 1,
+      anchorCornerRadius: 30
+    },
+    selection: {
+      transformer: {
+        borderDash: [15, 10],
+        borderStroke: '#FF0000',
+        borderStrokeWidth: 2,
+        anchorSize: 15,
+        anchorFill: 'white',
+        anchorStroke: '#FF0000',
+        anchorStrokeWidth: 1,
+        anchorCornerRadius: 30
+      }
+    }
   })
   editor.value = pikaso
-  // pikaso.board.background.overlay.node.setAttrs(
-  //   {
-  //     fill: "transparent",
-  //     fillLinearGradientColorStops: [0, "red", .5, "green", 1, "blue"],
-  //     fillLinearGradientStartPoint: { x: 0, y: 0 },
-  //     fillLinearGradientEndPoint: { x: 90, y: 50 }
-  //   }
-  // )
   pikaso.shapes.circle.insert({
     radius: 100,
     x: 250,
@@ -55,5 +69,11 @@ onMounted(() => {
 #canvas-container {
   border: solid 1px red;
   position: relative;
+}
+</style>
+<style>
+.pikaso {
+  left: 0px !important;
+  transform: none !important;
 }
 </style>
