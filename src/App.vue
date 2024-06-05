@@ -54,13 +54,10 @@ const addShape = () => {
     radius: 100,
     x: 250,
     y: 250,
-    fill: hex,
-    attrs: {
-      fill: hex
-    },
+    fill: hex
   })
   newShape.node.attrs.extra = { fill: hex }
-  editor.value.board.history.create(editor.value.board, [newShape.node])
+  editor.value.board.history.create(editor.value.board.stage, [newShape.node])
 }
 
 const undo = () => editor.value.board.history.undo()
