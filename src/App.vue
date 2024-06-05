@@ -2,12 +2,13 @@
 import HelloWorld from './components/HelloWorld.vue'
 import Pikaso, { ShapeModel } from 'pikaso';
 import { onMounted, ref } from 'vue';
+import { History } from './scripts/History';
 
 const editor = ref()
 
 onMounted(() => {
   const container = window.document.querySelector('#canvas-container')
-  const pikaso = new Pikaso({
+  const settings = {
     container,
     width: 500,
     height: 500,
@@ -33,24 +34,46 @@ onMounted(() => {
         anchorCornerRadius: 30
       }
     }
-  })
+  }
+  const pikaso = new Pikaso(settings)
   editor.value = pikaso
   pikaso.shapes.circle.insert({
     radius: 100,
     x: 250,
     y: 250,
-    fill: 'tomato'
+    fill: 'tomato',
   })
-  pikaso.board.history.undo = (() => {
-    console.log('undo')
-  })
+  pikaso.board.history = new History(settings, pikaso.events)
 })
+
+const genRanHex = size => [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('');
+
+const addShape = () => {
+  const hex = `#${genRanHex(6)}`
+  const newShape =  editor.value.shapes.circle.insert({
+    radius: 100,
+    x: 250,
+    y: 250,
+    fill: hex,
+    attrs: {
+      fill: hex
+    },
+  })
+  newShape.node.attrs.extra = { fill: hex }
+  editor.value.board.history.create(editor.value.board, [newShape.node])
+}
+
+const undo = () => editor.value.board.history.undo()
+const redo = () => editor.value.board.history.redo()
 
 </script>
 
 <template>
   <div id="canvas-container" class="canvas-container">
   </div>
+  <button @click="undo">Undo</button>
+  <button @click="addShape">Add Shape</button>
+  <button @click="redo">Redo</button>
   <HelloWorld msg="Vite + Vue" />
 </template>
 <style scoped>

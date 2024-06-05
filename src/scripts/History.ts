@@ -87,6 +87,7 @@ export class History {
         hooks,
       },
     ];
+    console.log({ state: this.getState() });
   }
 
   /**
@@ -143,18 +144,18 @@ export class History {
    * @param node The [[ShapeModel | shape's]] node
    */
   private getNodeState(node: HistoryNode): HistoryState {
-    const snapshpot = <HistoryNode>node.clone({});
+    const snapshot = <HistoryNode>node.clone({});
 
     if (node.getType() === "Group") {
       return {
         nodes: this.getNodesTree(node),
-        snapshots: this.getNodesTree(snapshpot).map((node) => node.attrs),
+        snapshots: this.getNodesTree(snapshot).map((node) => node.attrs),
       };
     }
 
     return {
       nodes: [node],
-      snapshots: [snapshpot.attrs],
+      snapshots: [snapshot.attrs],
     };
   }
 
